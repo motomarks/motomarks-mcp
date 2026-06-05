@@ -1,6 +1,6 @@
 {
   "name": "@motomarks/mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server for Motomarks brand search, brand assets, and image CDN URLs.",
   "type": "module",
   "repository": {

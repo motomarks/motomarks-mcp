@@ -21,7 +21,7 @@ export function createMotomarksMcpServer(
   const client = options.client ?? new MotomarksClient(config);
   const server = new McpServer({
     name: "motomarks-mcp",
-    version: "0.1.1",
+    version: "0.1.2",
   });
 
   registerTools(server, client, config);
