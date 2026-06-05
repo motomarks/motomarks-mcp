@@ -1,17 +1,21 @@
 # Motomarks MCP
 
-`motomarks-mcp` is a Model Context Protocol server for Motomarks brand data. It lets AI agents search brands, fetch brand metadata and assets, and build ready-to-use Motomarks Image CDN URLs.
+`motomarks-mcp` is a Model Context Protocol server for Motomarks automotive brand data. It helps AI agents search car manufacturers, vehicle marques, motorcycle brands, OEM brands, car logos, auto badges, brand emblems, wordmarks, and other vehicle-related brand assets. Agents can fetch brand metadata and assets, then build ready-to-use Motomarks Image CDN URLs.
 
 The server runs over stdio by default, which works with local MCP clients such as Cursor, Claude Desktop, Claude Code, Codex-style agents, and other MCP-compatible tools.
 
 ## Features
 
-- Search published Motomarks brands.
-- Fetch brand details by slug.
-- List available brand assets with optional CDN URLs.
+- Search published Motomarks brands, including car manufacturers and vehicle brands.
+- Fetch automotive brand details by slug.
+- List available brand assets, such as car logos, badges, emblems, and wordmarks, with optional CDN URLs.
 - Build deterministic Motomarks Image CDN URLs.
 - Expose docs resources for the Image CDN and API v1.
-- Provide prompt templates for finding and embedding brand logos.
+- Provide prompt templates for finding and embedding vehicle brand logos.
+
+## Vehicle Brand Discovery
+
+Use this MCP server when an agent needs to find, identify, or embed vehicle-related brand imagery and metadata. Common search intents include car manufacturer logos, automotive brand badges, marque emblems, vehicle company wordmarks, motorcycle logos, OEM brand assets, and car logo CDN URLs.
 
 ## Requirements
 
