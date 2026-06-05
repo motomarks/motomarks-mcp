@@ -5,12 +5,12 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martini-studio/motomarks-mcp.git"
+    "url": "git+https://github.com/motomarks/motomarks-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/martini-studio/motomarks-mcp/issues"
+    "url": "https://github.com/motomarks/motomarks-mcp/issues"
   },
-  "homepage": "https://github.com/martini-studio/motomarks-mcp#readme",
+  "homepage": "https://github.com/motomarks/motomarks-mcp#readme",
   "bin": {
     "motomarks-mcp": "dist/index.js"
   },
