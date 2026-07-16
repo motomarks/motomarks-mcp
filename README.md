@@ -1,8 +1,16 @@
-# Motomarks MCP Server
+<p align="center">
+  <img src="images/motomarks_logo.svg" alt="Motomarks" width="320">
+</p>
 
-**The official Model Context Protocol (MCP) server for Motomarks: a cloud-hosted bridge that gives your AI tools secure, real-time access to the Motomarks car logo API and image CDN.**
+<h1 align="center">Motomarks MCP Server</h1>
 
-MCP Registry: `io.motomarks/mcp` · Auth: OAuth 2.1 or API key · Hosting: Motomarks Cloud
+<p align="center">
+  <b>The official Model Context Protocol (MCP) server for Motomarks: a cloud-hosted bridge that gives your AI tools secure, real-time access to the Motomarks car logo API and image CDN.</b>
+</p>
+
+<p align="center">
+  MCP Registry: <code>io.motomarks/mcp</code> · Auth: OAuth 2.1 or API key · Hosting: Motomarks Cloud
+</p>
 
 The Motomarks MCP Server connects MCP-compatible clients to the Motomarks brand library. Once configured, your AI tools can search automotive brands, fetch brand data and color palettes, browse logo assets, and generate ready-to-embed CDN image URLs. Authentication uses **OAuth 2.1** (browser sign-in) or a **Motomarks secret API key**, so every request respects your plan and rate limits.
 

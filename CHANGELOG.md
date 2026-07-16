@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+- Added Motomarks logo assets (`assets/logo.svg` for client plugins, `images/motomarks_logo.svg` for the README).
+- Wired the Cursor plugin `logo` field and registry `icons` in `server.json`.
+
 ## 1.0.0
 
 - Rearchitected as a distribution repo for the hosted Motomarks MCP server at `https://motomarks.io/api/mcp`. This repo no longer contains server code or an npm package.

@@ -3,12 +3,24 @@
   "name": "io.motomarks/mcp",
   "title": "Motomarks MCP Server",
   "description": "Car logo API and image CDN: search automotive brands, fetch brand data, and build logo CDN URLs.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://motomarks.io/docs/mcp",
   "repository": {
     "url": "https://github.com/motomarks/motomarks-mcp",
     "source": "github"
   },
+  "icons": [
+    {
+      "src": "https://motomarks.io/favicon.png",
+      "mimeType": "image/png",
+      "sizes": ["400x400"]
+    },
+    {
+      "src": "https://motomarks.io/icon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",
