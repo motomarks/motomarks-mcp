@@ -1,218 +1,125 @@
-# Motomarks MCP
+# Motomarks MCP Server
 
-`motomarks-mcp` is a Model Context Protocol server for Motomarks automotive brand data. It helps AI agents search car manufacturers, vehicle marques, motorcycle brands, OEM brands, car logos, auto badges, brand emblems, wordmarks, and other vehicle-related brand assets. Agents can fetch brand metadata and assets, then build ready-to-use Motomarks Image CDN URLs.
+**The official Model Context Protocol (MCP) server for Motomarks: a cloud-hosted bridge that gives your AI tools secure, real-time access to the Motomarks car logo API and image CDN.**
 
-The server runs over stdio by default, which works with local MCP clients such as Cursor, Claude Desktop, Claude Code, Codex-style agents, and other MCP-compatible tools.
+MCP Registry: `io.motomarks/mcp` · Auth: OAuth 2.1 or API key · Hosting: Motomarks Cloud
 
-## Features
+The Motomarks MCP Server connects MCP-compatible clients to the Motomarks brand library. Once configured, your AI tools can search automotive brands, fetch brand data and color palettes, browse logo assets, and generate ready-to-embed CDN image URLs. Authentication uses **OAuth 2.1** (browser sign-in) or a **Motomarks secret API key**, so every request respects your plan and rate limits.
 
-- Search published Motomarks brands, including car manufacturers and vehicle brands.
-- Fetch automotive brand details by slug.
-- List available brand assets, such as car logos, badges, emblems, and wordmarks, with optional CDN URLs.
-- Build deterministic Motomarks Image CDN URLs.
-- Expose docs resources for the Image CDN and API v1.
-- Provide prompt templates for finding and embedding vehicle brand logos.
+With the Motomarks MCP Server, you can:
 
-## Vehicle Brand Discovery
+- **Search and inspect** any published car brand: names, slugs, descriptions, colors, palettes, social links, and company facts.
+- **Browse logo assets** per brand: full logos, badges, and wordmarks in webp, png, and svg across five sizes.
+- **Generate CDN image URLs** authenticated with your publishable key, ready to paste into HTML, React, or Markdown.
+- **Check your account**: plan, attribution status, and today's API usage.
 
-Use this MCP server when an agent needs to find, identify, or embed vehicle-related brand imagery and metadata. Common search intents include car manufacturer logos, automotive brand badges, marque emblems, vehicle company wordmarks, motorcycle logos, OEM brand assets, and car logo CDN URLs.
+## One-click setup
 
-## Requirements
+| [Add to Cursor](https://cursor.com/en/install-mcp?name=Motomarks&config=eyJ1cmwiOiJodHRwczovL21vdG9tYXJrcy5pby9hcGkvbWNwIn0%3D) | [Add to VS Code](https://vscode.dev/redirect/mcp/install?name=Motomarks&config=%7B%22url%22%3A%22https%3A%2F%2Fmotomarks.io%2Fapi%2Fmcp%22%2C%22type%22%3A%22http%22%7D) |
+| --- | --- |
+| Reference brand logos directly from your codebase. | Search brands and embed logos via GitHub Copilot. |
 
-- Node.js 20 or newer.
-- A Motomarks secret key starting with `sk_` for API lookups.
-- A Motomarks publishable key starting with `pk_` for Image CDN URLs.
+## Endpoint
 
-Secret keys are for server-side use only. Do not put `MOTOMARKS_SECRET_KEY` in client-side code, screenshots, shared config files, or public logs.
-
-## Usage
-
-Run directly with `npx`:
-
-```sh
-npx -y motomarks-mcp
+```
+https://motomarks.io/api/mcp
 ```
 
-For local development:
+Transport: streamable HTTP. On first connection your client runs a browser-based OAuth flow (dynamic client registration + PKCE) against your Motomarks account. No JSON editing or manual token handling required.
 
-```sh
-npm install
-npm run build
-node dist/index.js
-```
+## Supported clients
 
-## Environment
+| Client | Configuration |
+| --- | --- |
+| Claude (Claude.ai, Desktop, Code) | Add a custom connector with the endpoint URL, or use `claude mcp add --transport http motomarks https://motomarks.io/api/mcp` |
+| Cursor | One-click install above, or add the URL under Settings → MCP |
+| VS Code (GitHub Copilot) | One-click install above, or `"motomarks": { "type": "http", "url": "https://motomarks.io/api/mcp" }` in `mcp.json` |
+| Google Gemini CLI | `gemini extensions install` with this repo, or add the `httpUrl` to `settings.json` |
+| Any stdio-only client | Connect through the [mcp-remote](https://www.npmjs.com/package/mcp-remote) proxy (below) |
 
-```sh
-MOTOMARKS_SECRET_KEY=sk_00000000000000000000000000000000
-MOTOMARKS_PUBLIC_KEY=pk_00000000000000000000000000000000
-MOTOMARKS_API_BASE_URL=https://motomarks.io
-MOTOMARKS_IMAGE_BASE_URL=https://motomarks.io/img
-MOTOMARKS_TIMEOUT_MS=10000
-MOTOMARKS_REFERER=https://your-site.example
-```
+### Local proxy (stdio clients)
 
-`MOTOMARKS_API_BASE_URL`, `MOTOMARKS_IMAGE_BASE_URL`, `MOTOMARKS_TIMEOUT_MS`, and `MOTOMARKS_REFERER` are optional. The key variables are required at startup.
-
-## Cursor Configuration
-
-Add this to your Cursor MCP configuration:
+For clients that only speak stdio, connect through [mcp-remote](https://www.npmjs.com/package/mcp-remote):
 
 ```json
 {
   "mcpServers": {
     "motomarks": {
       "command": "npx",
-      "args": ["-y", "motomarks-mcp"],
-      "env": {
-        "MOTOMARKS_SECRET_KEY": "sk_00000000000000000000000000000000",
-        "MOTOMARKS_PUBLIC_KEY": "pk_00000000000000000000000000000000"
-      }
+      "args": ["-y", "mcp-remote", "https://motomarks.io/api/mcp"]
     }
   }
 }
 ```
 
-For local development before publishing to npm:
+Requires Node.js 20+. The proxy opens a browser for OAuth sign-in and caches tokens locally.
 
-```json
-{
-  "mcpServers": {
-    "motomarks": {
-      "command": "node",
-      "args": ["/absolute/path/to/motomarks-mcp/dist/index.js"],
-      "env": {
-        "MOTOMARKS_SECRET_KEY": "sk_00000000000000000000000000000000",
-        "MOTOMARKS_PUBLIC_KEY": "pk_00000000000000000000000000000000"
-      }
-    }
-  }
-}
+### Headless / API key authentication
+
+For CI, backends, or non-interactive setups, authenticate with a Motomarks **secret API key** (`sk_...`, created in your [dashboard](https://motomarks.io/dashboard)) instead of OAuth by sending it as a Bearer token:
+
+```
+Authorization: Bearer sk_...
 ```
 
-## Claude Desktop Configuration
-
-Claude Desktop uses the same stdio shape in `claude_desktop_config.json`:
+With the local proxy:
 
 ```json
 {
   "mcpServers": {
     "motomarks": {
       "command": "npx",
-      "args": ["-y", "motomarks-mcp"],
-      "env": {
-        "MOTOMARKS_SECRET_KEY": "sk_00000000000000000000000000000000",
-        "MOTOMARKS_PUBLIC_KEY": "pk_00000000000000000000000000000000"
-      }
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://motomarks.io/api/mcp",
+        "--header",
+        "Authorization: Bearer sk_..."
+      ]
     }
   }
 }
 ```
 
-On macOS, the file is usually at:
+## Supported tools
 
-```sh
-~/Library/Application Support/Claude/claude_desktop_config.json
-```
+| Tool | Intent | Description |
+| --- | --- | --- |
+| `search_brands` | read | Search published brands by name, company, or slug; optionally include CDN image URLs |
+| `get_brand` | read | Full brand detail: description, colors, palette, social links, company facts, FAQs |
+| `list_brand_assets` | read | Available logo assets (type, format, size, aspect, dimensions) with CDN URLs |
+| `build_image_url` | read | Deterministic CDN image URL using your publishable key |
+| `describe_api_endpoint` | read | HTTP reference for the raw REST API operations |
+| `get_account` | read | Your plan, attribution status, and today's usage vs. limit |
 
-## Other MCP Clients
+Resources: `motomarks://docs/image-cdn`, `motomarks://docs/api-v1`, `motomarks://brand/{slug}`.
+Prompts: `find_brand_logo`, `embed_brand_image`.
 
-Any stdio MCP client can launch the server with:
+## Example workflows
 
-```sh
-node /absolute/path/to/motomarks-mcp/dist/index.js
-```
+- "Add the BMW badge logo to this pricing table."
+- "What are Lamborghini's brand colors? Give me the full palette."
+- "List every wordmark asset for Toyota and pick the best one for a dark navbar."
+- "How many API requests do I have left today?"
 
-Pass credentials through the process environment. Do not pass secret keys as command-line arguments because process lists and logs can expose them.
+## Data and security
 
-## Tools
+- All traffic is encrypted in transit over HTTPS.
+- OAuth 2.1 (PKCE, dynamic client registration) or scoped API keys control access.
+- Tools respect your Motomarks plan, attribution requirements, and rate limits.
+- Secret keys are never echoed back by tools; account output masks them.
 
-### `search_brands`
+MCP clients can act on your behalf. Only use trusted clients, prefer least privilege, and review your connected apps in the Motomarks dashboard. See [SECURITY.md](SECURITY.md) for reporting.
 
-Search published brands.
+## Publishing (maintainers)
 
-Inputs:
+This repo contains no server code — the server is hosted at `https://motomarks.io/api/mcp`. Publishing means listing the endpoint in registries and directories:
 
-- `query`: optional brand name, company name, or slug.
-- `limit`: result limit from 1 to 100.
-- `includeImageUrls`: include generated CDN URLs.
-- `type`, `format`, `size`, `aspect`: image options used when URLs are requested.
+1. Verify the `motomarks.io` domain for the `io.motomarks` registry namespace (DNS or HTTP challenge), then publish the manifest: `mcp-publisher login dns --domain motomarks.io && mcp-publisher publish` with [server.json](server.json).
+2. Submit the registry entry / repo to MCP directories (official MCP Registry, Cursor marketplace, Claude connectors, PulseMCP, Smithery, Glama).
 
-### `get_brand`
+## Support
 
-Fetch a brand by slug.
-
-Inputs:
-
-- `slug`: required brand slug.
-- `includeAssets`: include a compact asset summary.
-- `includeCdnUrls`: include generated CDN URLs for listed assets.
-
-### `list_brand_assets`
-
-List assets for a brand.
-
-Inputs:
-
-- `slug`: required brand slug.
-- `type`: optional `full`, `badge`, or `wordmark`.
-- `format`: optional `webp`, `png`, or `svg`.
-- `aspect`: optional `square` or `height`.
-- `includeCdnUrls`: include generated CDN URLs for webp/png assets.
-
-### `build_image_url`
-
-Build a Motomarks Image CDN URL using the configured publishable key. This tool does not call the secret-key API.
-
-Inputs:
-
-- `slug`: required brand slug.
-- `type`: `full`, `badge`, or `wordmark`.
-- `format`: `webp` or `png`.
-- `size`: `xs`, `sm`, `md`, `lg`, or `xl`.
-- `aspect`: `square` or `height`.
-
-### `describe_api_endpoint`
-
-Describe a Motomarks HTTP endpoint for agents that need to generate code.
-
-Inputs:
-
-- `operation`: `searchBrands`, `getBrand`, `listAssets`, or `imageCdn`.
-
-## Resources
-
-- `motomarks://docs/image-cdn`
-- `motomarks://docs/api-v1`
-- `motomarks://brand/{slug}`
-
-## Prompts
-
-- `find_brand_logo`
-- `embed_brand_image`
-
-## Development
-
-```sh
-npm install
-npm run typecheck
-npm test
-npm run build
-```
-
-Run the optional integration smoke test only when real keys are available:
-
-```sh
-MOTOMARKS_SECRET_KEY=sk_... MOTOMARKS_PUBLIC_KEY=pk_... npm run test:integration
-```
-
-## Security
-
-- The secret key is only sent in the `Authorization: Bearer` header to Motomarks API v1 endpoints.
-- The server redacts configured keys in tool errors.
-- Generated CDN URLs include the publishable key because that is the intended browser-facing credential.
-- The project does not import private Motomarks monorepo code or connect directly to the Motomarks database.
-
-## License
-
-MIT
+- Docs: [motomarks.io/docs/mcp](https://motomarks.io/docs/mcp)
+- Issues: [GitHub issues](https://github.com/motomarks/motomarks-mcp/issues)
+- Email: [support@motomarks.io](mailto:support@motomarks.io)

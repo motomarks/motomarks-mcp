@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "motomarks": {
+      "type": "http",
+      "url": "https://motomarks.io/api/mcp"
+    }
+  }
+}

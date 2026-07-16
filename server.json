@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.motomarks/mcp",
+  "description": "Car logo API and image CDN: search automotive brands, fetch brand data, and build logo CDN URLs.",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/motomarks/motomarks-mcp",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "websiteUrl": "https://motomarks.io/docs/mcp",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://motomarks.io/api/mcp"
+    }
+  ]
+}

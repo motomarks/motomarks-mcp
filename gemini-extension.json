@@ -1,0 +1,10 @@
+{
+  "name": "motomarks",
+  "version": "1.0.0",
+  "description": "Motomarks car logo API and image CDN - search brands, fetch brand data, and build logo CDN URLs.",
+  "mcpServers": {
+    "motomarks": {
+      "httpUrl": "https://motomarks.io/api/mcp"
+    }
+  }
+}
